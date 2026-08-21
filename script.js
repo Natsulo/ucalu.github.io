@@ -1,5 +1,4 @@
 const botao = document.getElementById("botaowo")
-const botao = document.getElementbyId("botaowo")
 const body = document.body
 const h1 = document.querySelector("h1")
 botao.addEventListener("click", function() {
