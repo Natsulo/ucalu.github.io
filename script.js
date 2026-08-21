@@ -1,4 +1,4 @@
-const botao = document.button
+const botao = document.getElementById("butaowo")
 const body = document.body
 const h1 = document.h1
 botao.addEventListener("click", function () {
