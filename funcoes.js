@@ -1,11 +1,17 @@
 const prompt = require("prompt-sync")()
-const log = (base, numero) => Math.log(numero) / Math.log(base)
-const fatorial =  n => {
-  if (n < 0) return 
-  if (n === 0 || n === 1) return 1;
-  return n * fatorial(n - 1);
+function logaritmo(numero, base = 10) {
+    return Math.log(numero) / Math.log(base)
 }
-function pergunta(saber) {
+function fatorial(numero) {
+  if (numero < 0) return
+  if (numero === 0 || numero === 1) return 1;
+  let a = 1
+  for (let i = 1;i <= numero; i++) {
+    a *= i
+  }
+    return a
+}
+export function pergunta(saber) {
     if (saber == "sim" || saber == "ss" || saber == "s" || saber == "ye" || saber == "yes" || saber == "yea" || saber == "yeah" || saber == "siim" || saber == "sim") {
         return true
     }
@@ -13,7 +19,7 @@ function pergunta(saber) {
         return false
     }
 }
-function resolverExpressão() {
+export function resolverExpressão() {
     console.log("instruções:\ndigite '+' para somar.\ndigite '-' para subtrair.\ndigite 'x', ou '*' para multiplicar, se não houver sinal entre número e parenteses, automaticamente irá se tornar uma multiplicação.\ndigite '/' para dividir.\ndigite '^' para elevar o numero anterior ao proximo número.\npara raizes utilize exponenciação com o segundo número sendo uma divisão ou multiplicação.\npara utilizar seno, cosseno e tangente, utilize, respectivamente: 'sen', 'cos', 'tan'.\nuse 'arsen', 'arccos' e 'arctan' para o inverso de seno cosseno e tangente, respectivamente.\ndigite 'log' em seguida o numero da base, e após isso o numero, se não tiver um proximo numero, ele ira considerar que o numero posto é um numero normal e a base vai ser 10.\npara parenteses, colchetes e chaves, ultilize como quiser.\nfatorial é feito com 'fatorial' e o numero posterior.")
     let expressao = prompt("escreva sua expressão númerica")
     let expressuda = expressao.match(/\d+\.?\d*|arctan|arcsen|arccos|sen|cos|tan|log|fatorial|x|elevado a|raiz de|raiz|[+\-*/^()[\]{}!]/g)

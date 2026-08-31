@@ -1,3 +1,4 @@
+import {pergunta, resolverExpressao} from funcoes.js
 const prompt = require('prompt-sync')()
 const log = (base, numero) => Math.log(numero) / Math.log(base)
 const fatorial =  n => {
