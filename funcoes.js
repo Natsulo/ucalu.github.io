@@ -6,8 +6,17 @@ function fatorial(numero) {
   if (numero < 0) return
   if (numero === 0 || numero === 1) return 1;
   let a = 1
-  for (let i = 1;i <= numero; i++) {
+  for (let i = 1; i <= numero; i++) {
     a *= i
+  }
+    return a
+}
+function somatorio(numero) {
+  if (numero < 0) return
+  if (numero === 0 || numero === 1) return 1;
+  let a = 1
+  for (let i = 1; i <= numero; i++) {
+    a += i
   }
     return a
 }
@@ -22,7 +31,7 @@ export function pergunta(saber) {
 export function resolverExpressão() {
     console.log("instruções:\ndigite '+' para somar.\ndigite '-' para subtrair.\ndigite 'x', ou '*' para multiplicar, se não houver sinal entre número e parenteses, automaticamente irá se tornar uma multiplicação.\ndigite '/' para dividir.\ndigite '^' para elevar o numero anterior ao proximo número.\npara raizes utilize exponenciação com o segundo número sendo uma divisão ou multiplicação.\npara utilizar seno, cosseno e tangente, utilize, respectivamente: 'sen', 'cos', 'tan'.\nuse 'arsen', 'arccos' e 'arctan' para o inverso de seno cosseno e tangente, respectivamente.\ndigite 'log' em seguida o numero da base, e após isso o numero, se não tiver um proximo numero, ele ira considerar que o numero posto é um numero normal e a base vai ser 10.\npara parenteses, colchetes e chaves, ultilize como quiser.\nfatorial é feito com 'fatorial' e o numero posterior.")
     let expressao = prompt("escreva sua expressão númerica")
-    let expressuda = expressao.match(/\d+\.?\d*|arctan|arcsen|arccos|sen|cos|tan|log|fatorial|x|elevado a|raiz de|raiz|[+\-*/^()[\]{}!]/g)
+    let expressuda = expressao.match(/\d+\.?\d*|arctan|arcsen|arccos|sen|cos|tan|log|fatorial|x|elevado a|raiz de|raiz|somatorio de|somatorio|?|[+\-*/^()[\]{}!]/g)
     if (expressuda[0] === "") {
         expressuda.splice(0, 1) 
         }
@@ -90,7 +99,7 @@ export function resolverExpressão() {
                 if (expressuda.includes("(") == false && expressuda.includes(")") == false) {
                     listaExpressionista = expressuda
                 }
-                while (listaExpressionista.includes("^") || listaExpressionista.includes("log") || listaExpressionista.includes("sen") || listaExpressionista.includes("cos") || listaExpressionista.includes("tan") || listaExpressionista.includes("arctan") || listaExpressionista.includes("fatorial") || listaExpressionista.includes("raiz")) {
+                while (listaExpressionista.includes("^") || listaExpressionista.includes("log") || listaExpressionista.includes("sen") || listaExpressionista.includes("cos") || listaExpressionista.includes("tan") || listaExpressionista.includes("arctan") || listaExpressionista.includes("fatorial") || listaExpressionista.includes("somatorio") || listaExpressionista.includes("raiz")) {
                     for (let i = 0; i < listaExpressionista.length; i++) {
                         let dentroDoi = listaExpressionista[i]
                         if (!isNaN(dentroDoi)) {
