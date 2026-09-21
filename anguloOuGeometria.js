@@ -238,3 +238,75 @@ if (perguntaSecundaria == "lados") {
   else if (perguntaSecundaria == "angulos") {
     console.log("")
   }
+  /*
+  const Xespacial = 500
+const Yespacial = 500
+let vertice = []
+let selecionarVertice = -1
+let menuAberto = false
+let menuX = 0
+let menuY = 0
+let numeroDeLados = Number(prompt("lados"))
+function setup() {
+  createCanvas(Xespacial, Yespacial);
+      let raio = Math.min(width, height) * 0.35
+    for (let i = 0; i < numeroDeLados; i++) {
+    let angulo = PI * 2 / numeroDeLados
+    let intervalo = angulo * i - PI/2
+    let x = cos(intervalo) * raio + Xespacial/2
+    let y = sin(intervalo) * raio + Yespacial/2
+      vertice.push({x: x, y: y})
+  }
+}
+function draw() {
+    background(220);
+    beginShape()
+    for (let i = 0; i < vertice.length; i++) {
+        vertex(vertice[i].x, vertice[i].y)
+    }
+    endShape(CLOSE)
+    for (let i = 0; i < vertice.length; i++) {
+        circle(vertice[i].x, vertice[i].y, 10)
+    }
+    if (menuAberto) {
+        fill(255)
+        stroke(0)
+        rect(menuX, menuY, 150, 100)
+        fill(0)
+        noStroke()
+        text("Adicionar medida", menuX + 10, menuY + 25)
+        text("Achar ângulo", menuX + 10, menuY + 50)
+        text("Dividir ângulo", menuX + 10, menuY + 75)
+    }
+}
+function mousePressed() {
+    for (let i = 0; i < vertice.length; i++) {
+        let distancia = dist(
+            mouseX,
+            mouseY,
+            vertice[i].x,
+            vertice[i].y
+        )
+        if (distancia < 10) {
+            selecionarVertice = i
+            if (mouseButton === RIGHT) {
+                menuAberto = true
+                menuX = mouseX
+                menuY = mouseY
+            }
+        }
+    }
+    if (mouseButton === RIGHT) {
+        return false
+    }
+}
+function mouseDragged() {
+    if (selecionarVertice !== -1) {
+        vertice[selecionarVertice].x = mouseX
+        vertice[selecionarVertice].y = mouseY
+    }
+}
+function mouseReleased() {
+    selecionarVertice = -1
+}
+  */
