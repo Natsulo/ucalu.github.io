@@ -3,19 +3,21 @@ function logaritmo(numero, base = 10) {
     return Math.log(numero) / Math.log(base)
 }
 function fatorial(numero) {
-  let resultado = 1
     if (numero < -1) {
-    for (let i = -1; i >= numero; i--) {
-        resultado *= i
+        let resultado = 1
+        for (let i = -1; i >= numero; i--) {
+            resultado *= i
+        }
+        return resultado
     }
-  }
-  if (numero === 0 || numero === 1) return 1;
-  if (numero > 1) {
-    for (let i = 1; i <= numero; i++) {
-    resultado *= i
-    }
-  }
-    return resultado
+    else if (numero === -1 || numero === 0 || numero === 1) return 1
+    else if (numero > 1) {
+        let resultado = 1
+        for (let i = 1; i <= numero; i++) {
+            resultado *= i
+        }
+        return resultado
+    } 
 }
 function somatorio(numero) {
   if (numero < 0) {
@@ -29,7 +31,7 @@ function somatorio(numero) {
     return resultado
   }
   else {
-  if (numero === 0 || numero === 1) return 1;
+  if (numero === 0 || numero === 1) return 1
   let resultado = 0
   for (let i = 1; i <= numero; i++) {
     resultado += i
@@ -38,23 +40,24 @@ function somatorio(numero) {
     }
 }
 function somatorial(numero) {
-    if (numero === 0 || numero === 1) return 1
+    if (numero === -1 || numero === 0 || numero === 1) return 1
     let resultado = 0
     if (numero > 1) {
         for (let i = 1; i <= numero; i++) {
             resultado += fatorial(i)
         }
+        return resultado
     }
     else if (numero < -1) {
         for (let i = -1; i >= numero; i--) {
             resultado += fatorial(i)
         }
+        return resultado
     }
-    return resultado
 }
 console.log("instruções:\ndigite '+' para somar.\ndigite '-' para subtrair.\ndigite 'x', ou '*' para multiplicar, se não houver sinal entre número e parenteses, automaticamente irá se tornar uma multiplicação.\ndigite '/' para dividir.\ndigite '^' para elevar o numero anterior ao proximo número.\npara raizes utilize exponenciação com o segundo número sendo uma divisão ou multiplicação.\npara utilizar seno, cosseno e tangente, utilize, respectivamente: 'sen', 'cos', 'tan'.\nuse 'arcsen', 'arccos' e 'arctan' para o inverso de seno cosseno e tangente, respectivamente.\ndigite 'log' em seguida o numero da base, e após isso o numero, se não tiver um proximo numero, ele ira considerar que o numero posto é um numero normal e a base vai ser 10.\npara parenteses, colchetes e chaves, ultilize como quiser.\nfatorial é feito com 'fatorial' e o numero posterior. se quiser usar o somatorio use '?' e se quiser usar o somatorial use §")
-let expressao = prompt("escreva sua expressão númerica")
-let expressuda = expressao.match(/\d+\.?\d*|arctan|arcsen|arccos|sen|cos|tan|log|fatorial|x|elevado a|raiz de|raiz|somatorio de|somatorio|somatorial|§|[+\-*/^()[\]{}!]/g)
+let expressao = prompt("escreva sua expressão númerica").replace(/(?<=\d),(?=\d)/g, ".")
+let expressuda = expressao.match(/\d+\.?\d*|arctan|arcsen|arccos|sen|cos|tan|log|fatorial|x|elevado a|raiz de|raiz|somatorio de|somatorio|\?|!|somatorial|§|[+\-*/^()[\]{}!]/g)
 if (expressuda[0] === "") {
     expressuda.splice(0, 1) 
     }
@@ -66,7 +69,7 @@ if (expressuda[0] === "") {
             expressuda.splice(i, 1, ")")
         }
 
-        if (expressuda[i - 1] == "(" && i == !NaN && expressuda[i + 1] == ")") {
+        if (expressuda[i - 1] == "(" && !isNaN(i) && expressuda[i + 1] == ")") {
             expressuda.splice(expressuda[i - 1], 3, expressuda[i])
         }
         if (expressuda[i] == "x") {
@@ -84,7 +87,7 @@ if (expressuda[0] === "") {
                 expressuda.splice(i, 1)
             }
             else {
-            expressuda.splice(i + 2, 1, "?")
+            expressuda.splice(i + 2, 0, "?")
             expressuda.splice(i, 1)
             }
         }
@@ -94,7 +97,7 @@ if (expressuda[0] === "") {
                 expressuda.splice(i, 1)
             }
             else {
-            expressuda.splice(i + 2, 1, "?")
+            expressuda.splice(i + 2, 0, "?")
             expressuda.splice(i, 1)
             }
         }
@@ -143,7 +146,40 @@ if (expressuda[0] === "") {
                 listaExpressionista = expressuda
             }
             console.log(listaExpressionista)
-            while (listaExpressionista.includes("§") || listaExpressionista.includes("^") || listaExpressionista.includes("log") || listaExpressionista.includes("sen") || listaExpressionista.includes("cos") || listaExpressionista.includes("tan") || listaExpressionista.includes("arctan") || listaExpressionista.includes("fatorial")|| listaExpressionista.includes("arccos")|| listaExpressionista.includes("arcsen") || listaExpressionista.includes("?") || listaExpressionista.includes("raiz")) {
+            while (listaExpressionista.includes("somatorial") ||listaExpressionista.includes("§") || listaExpressionista.includes("!") || listaExpressionista.includes("fatorial") || listaExpressionista.includes("?")) {
+                for (let i = 0; i < listaExpressionista.length; i++) {
+                    let dentroDoi = listaExpressionista[i]
+                    if (!isNaN(dentroDoi)) {
+                        listaExpressionista[i] = Number(dentroDoi)
+                    }
+                    else if (isNaN(dentroDoi)) {
+                        if (dentroDoi == "fatorial") {
+                            let resultadoProcessual = fatorial(listaExpressionista[i + 1])
+                            listaExpressionista.splice(i, 2, resultadoProcessual)
+                        }
+                        else if (dentroDoi == "!") {
+                            let resultadoProcessual = fatorial(listaExpressionista[i - 1])
+                            listaExpressionista.splice(i - 1, 2, resultadoProcessual)
+                        }
+                        else if (dentroDoi == "?") {
+                            let resultadoProcessual = somatorio(listaExpressionista[i - 1])
+                            listaExpressionista.splice(i - 1, 2, resultadoProcessual)
+                        }
+                        else if (dentroDoi == "§") {
+                            let resultadoProcessual = somatorial(listaExpressionista[i - 1])
+                            listaExpressionista.splice(i - 1, 2, resultadoProcessual)
+                        }
+                        else if (dentroDoi == "somatorial") {
+                            let resultadoProcessual = somatorial(listaExpressionista[i + 1])
+                            listaExpressionista.splice(i, 2, resultadoProcessual)
+                        }
+                        else if (dentroDoi != listaExpressionista.includes("somatorial") && dentroDoi != listaExpressionista.includes("§") && dentroDoi != listaExpressionista.includes("?") && dentroDoi != listaExpressionista.includes("!") && dentroDoi != listaExpressionista.includes("fatorial")) {
+                            continue
+                        }
+                    }
+                }
+            }
+            while (listaExpressionista.includes("^") || listaExpressionista.includes("log") || listaExpressionista.includes("sen") || listaExpressionista.includes("cos") || listaExpressionista.includes("tan") || listaExpressionista.includes("arctan") || listaExpressionista.includes("arccos")|| listaExpressionista.includes("arcsen") || listaExpressionista.includes("raiz")) {
                 for (let i = 0; i < listaExpressionista.length; i++) {
                     let dentroDoi = listaExpressionista[i]
                     if (!isNaN(dentroDoi)) {
@@ -167,8 +203,20 @@ if (expressuda[0] === "") {
                             }
                         }
                         else if (dentroDoi == "raiz") {
-                            let resultadoProcessual = Math.pow(listaExpressionista[i + 1], 1/listaExpressionista[i - 1])
-                            listaExpressionista.splice(i - 1, 3, resultadoProcessual)
+                            if (!isNaN(listaExpressionista[i - 1])) {
+                                if (listaExpressionista[i - 1] == 3 || listaExpressionista[i - 1] == "3") {
+                                    let resultadoProcessual = Math.cbrt(listaExpressionista[i + 1]) 
+                                    listaExpressionista.splice(i - 1, 3, resultadoProcessual)
+                                }
+                                else {
+                                    let resultadoProcessual = Math.pow(listaExpressionista[i + 1], 1/listaExpressionista[i - 1])
+                                    listaExpressionista.splice(i - 1, 3, resultadoProcessual)
+                                }
+                            }
+                            else {
+                            let resultadoProcessual = Math.pow(listaExpressionista[i + 1], 1/2)
+                            listaExpressionista.splice(i, 2, resultadoProcessual)
+                            }
                         }
                         else if (dentroDoi == "log") {
                             let resultadoProcessual = logaritmo(listaExpressionista[i + 2], listaExpressionista[i + 1])
@@ -178,42 +226,36 @@ if (expressuda[0] === "") {
                             listaExpressionista.splice(i, 3, resultadoProcessual)
                         }
                         else if (dentroDoi == "sen") {
-                            let resultadoProcessual = Math.round(Math.sin(listaExpressionista[i + 1] * Math.PI / 180)) 
+                            let resultadoProcessual = Math.round(Math.sin(listaExpressionista[i + 1] * Math.PI / 180) * 100000) / 100000
                             listaExpressionista.splice(i, 2, resultadoProcessual)
                         }
                         else if (dentroDoi == "cos") {
-                            let resultadoProcessual = Math.round(Math.cos(listaExpressionista[i + 1] * Math.PI / 180)) 
+                            let resultadoProcessual = Math.round(Math.cos(listaExpressionista[i + 1] * Math.PI / 180) * 100000) / 100000
                             listaExpressionista.splice(i, 2, resultadoProcessual)
                         }
                         else if (dentroDoi == "tan") {
-                            let resultadoProcessual = Math.round(Math.tan(listaExpressionista[i + 1] * Math.PI / 180))
+                            let resultadoProcessual = Math.round(Math.tan(listaExpressionista[i + 1] * Math.PI / 180) * 100000) / 100000
                             listaExpressionista.splice(i, 2, resultadoProcessual)
                         }
                         else if (dentroDoi == "arcsen") {
-                            let resultadoProcessual = Math.round(Math.asin(listaExpressionista[i + 1]) * 180 / Math.PI * 100000) / 100000
+                            let radianos = Math.asin(listaExpressionista[i + 1])
+                            let graus = radianos * 180 / Math.PI
+                            let resultadoProcessual = Math.round(graus * 100000) / 100000
                             listaExpressionista.splice(i, 2, resultadoProcessual)
                         }
                         else if (dentroDoi == "arccos") {
-                            let resultadoProcessual = Math.acos(listaExpressionista[i + 1])
+                            let radianos = Math.acos(listaExpressionista[i + 1])
+                            let graus = radianos * 180 / Math.PI
+                            let resultadoProcessual = Math.round(graus * 100000) / 100000
                             listaExpressionista.splice(i, 2, resultadoProcessual)
                         }
                         else if (dentroDoi == "arctan") {
-                            let resultadoProcessual = Math.atan(listaExpressionista[i + 1])
+                            let radianos = Math.atan(listaExpressionista[i + 1])
+                            let graus = radianos * 180 / Math.PI
+                            let resultadoProcessual = Math.round(graus * 100000) / 100000
                             listaExpressionista.splice(i, 2, resultadoProcessual)
                         }
-                        else if (dentroDoi == "fatorial") {
-                            let resultadoProcessual = fatorial(listaExpressionista[i + 1])
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "!") {
-                            let resultadoProcessual = fatorial(listaExpressionista[i - 1])
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "?") {
-                            let resultadoProcessual = somatorio(listaExpressionista[i - 1])
-                            listaExpressionista.splice(i - 1, 2, resultadoProcessual)
-                        }
-                        else if(dentroDoi != listaExpressionista.includes("§") && dentroDoi != listaExpressionista.includes("?") && dentroDoi != listaExpressionista.includes("^") && dentroDoi != listaExpressionista.includes("log") && dentroDoi != listaExpressionista.includes("sen") && dentroDoi != listaExpressionista.includes("cos") && dentroDoi != listaExpressionista.includes("tan") && dentroDoi != listaExpressionista.includes("arctan") && listaExpressionista.includes("raiz") && dentroDoi != listaExpressionista.includes("!") && dentroDoi != listaExpressionista.includes("arcsen") && dentroDoi != listaExpressionista.includes("arccos")) {
+                        else if (dentroDoi != listaExpressionista.includes("^") && dentroDoi != listaExpressionista.includes("log") && dentroDoi != listaExpressionista.includes("sen") && dentroDoi != listaExpressionista.includes("cos") && dentroDoi != listaExpressionista.includes("tan") && dentroDoi != listaExpressionista.includes("arctan") && listaExpressionista.includes("raiz") && dentroDoi != listaExpressionista.includes("arcsen") && dentroDoi != listaExpressionista.includes("arccos")) {
                             continue
                         }
                     }
@@ -277,3 +319,4 @@ if (expressuda[0] === "") {
         }
     }
 }
+console.log(somatorial(-3))
