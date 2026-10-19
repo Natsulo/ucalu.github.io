@@ -10,3 +10,8 @@ botao.addEventListener("click", function() {
     h1.style.left = `${Math.floor(Math.random() * 101)}%`
     h1.style.top = `${Math.floor(Math.random() * 101)}%`
 })
+
+const chaves = document.getElementById("chaves")
+chaves.addEventListener("click", function() {
+    alert("nunca vao ao rio grande do sul pior erro da minhha vida")
+})
