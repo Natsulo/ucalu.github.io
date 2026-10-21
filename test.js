@@ -1,322 +1,71 @@
 const prompt = require("prompt-sync")()
-function logaritmo(numero, base = 10) {
-    return Math.log(numero) / Math.log(base)
-}
-function fatorial(numero) {
-    if (numero < -1) {
-        let resultado = 1
-        for (let i = -1; i >= numero; i--) {
-            resultado *= i
-        }
-        return resultado
-    }
-    else if (numero === -1 || numero === 0 || numero === 1) return 1
-    else if (numero > 1) {
-        let resultado = 1
-        for (let i = 1; i <= numero; i++) {
-            resultado *= i
-        }
-        return resultado
-    } 
-}
-function somatorio(numero) {
-  if (numero < 0) {
-    numero *= -1
-    if (numero === 0 || numero === 1) return 1;
-    let resultado = 0
-    for (let i = 1; i <= numero; i++) {
-    resultado += i
-    }
-    resultado *= -1
-    return resultado
-  }
-  else {
-  if (numero === 0 || numero === 1) return 1
-  let resultado = 0
-  for (let i = 1; i <= numero; i++) {
-    resultado += i
-  }
-    return resultado
-    }
-}
-function somatorial(numero) {
-    if (numero === -1 || numero === 0 || numero === 1) return 1
-    let resultado = 0
-    if (numero > 1) {
-        for (let i = 1; i <= numero; i++) {
-            resultado += fatorial(i)
-        }
-        return resultado
-    }
-    else if (numero < -1) {
-        for (let i = -1; i >= numero; i--) {
-            resultado += fatorial(i)
-        }
-        return resultado
-    }
-}
-console.log("instruções:\ndigite '+' para somar.\ndigite '-' para subtrair.\ndigite 'x', ou '*' para multiplicar, se não houver sinal entre número e parenteses, automaticamente irá se tornar uma multiplicação.\ndigite '/' para dividir.\ndigite '^' para elevar o numero anterior ao proximo número.\npara raizes utilize exponenciação com o segundo número sendo uma divisão ou multiplicação.\npara utilizar seno, cosseno e tangente, utilize, respectivamente: 'sen', 'cos', 'tan'.\nuse 'arcsen', 'arccos' e 'arctan' para o inverso de seno cosseno e tangente, respectivamente.\ndigite 'log' em seguida o numero da base, e após isso o numero, se não tiver um proximo numero, ele ira considerar que o numero posto é um numero normal e a base vai ser 10.\npara parenteses, colchetes e chaves, ultilize como quiser.\nfatorial é feito com 'fatorial' e o numero posterior. se quiser usar o somatorio use '?' e se quiser usar o somatorial use §")
-let expressao = prompt("escreva sua expressão númerica").replace(/(?<=\d),(?=\d)/g, ".")
-let expressuda = expressao.match(/\d+\.?\d*|arctan|arcsen|arccos|sen|cos|tan|log|fatorial|x|elevado a|raiz de|raiz|somatorio de|somatorio|\?|!|somatorial|§|[+\-*/^()[\]{}!]/g)
-if (expressuda[0] === "") {
-    expressuda.splice(0, 1) 
-    }
-    for (let i = 0; i < expressuda.length; i++) {
-        if (expressuda[i] == "[" || expressuda[i] == "{") {
-            expressuda.splice(i, 1, "(")
-        }
-        else if (expressuda[i] == "}"  || expressuda[i] == "]") {
-            expressuda.splice(i, 1, ")")
-        }
-
-        if (expressuda[i - 1] == "(" && !isNaN(i) && expressuda[i + 1] == ")") {
-            expressuda.splice(expressuda[i - 1], 3, expressuda[i])
-        }
-        if (expressuda[i] == "x") {
-            expressuda.splice(i, 1, "*")
-        }
-        if (expressuda[i] == "elevado a") {
-            expressuda.splice(i, 1, "^")
-        }
-        if (expressuda[i] == "raiz de") {
-            expressuda.splice(i, 1, "raiz")
-        }
-        if (expressuda[i] == "somatorio de") {
-            if (expressuda[i + 1] == "(") {
-                expressuda.splice(expressuda.indexOf(")"), 0, "?")
-                expressuda.splice(i, 1)
-            }
-            else {
-            expressuda.splice(i + 2, 0, "?")
-            expressuda.splice(i, 1)
-            }
-        }
-        if (expressuda[i] == "somatorio") {
-            if (expressuda[i + 1] == "(") {
-                expressuda.splice(expressuda.indexOf(")"), 0, "?")
-                expressuda.splice(i, 1)
-            }
-            else {
-            expressuda.splice(i + 2, 0, "?")
-            expressuda.splice(i, 1)
-            }
-        }
-    }
-    for (let i = 0; i < expressuda.length; i ++) {
-        if (expressuda[i] == "(" && !isNaN(expressuda[i - 1])) {
-            expressuda.splice(i, 0, "*")
-            i++
-        }
-        else if (expressuda[i] == "(" && expressuda[i - 1] == ")") {
-            expressuda.splice(i + 1, 0, "*")
-            i++
-        }
-        if (expressuda[i] == ")" && !isNaN(expressuda[i + 1])) {
-            expressuda.splice(i + 1, 0, "*")
-            i++
-        }
-        else if (expressuda[i] == ")" && expressuda[i + 1] == "(") {
-            expressuda.splice(i + 1, 0, "*")
-            i++
-        }
-        if (expressuda.length == 1) {
-            console.log(Number(expressuda[0]))
-            break
-        }
-    }
-    while (expressuda.length > 1) {
-        let inicio = expressuda.lastIndexOf("(")
-        let fim = expressuda.indexOf(")", inicio)
-        let listaExpressionista
-        if (expressuda.includes("(")) {
-            listaExpressionista = expressuda.slice(inicio + 1, fim)
-            if (listaExpressionista.length == 1) {
-                expressuda.splice(inicio, fim - inicio + 1, listaExpressionista[0])
-            }
+const alfabeto = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+let listaDeOpcoes = []
+let opcao = ""
+function opcoes() {
+    let unidadeDeMedida = ""
+    while (true) {
+        unidadeDeMedida = prompt("qual o nome da unidade de medida?")
+        if (listaDeOpcoes.some(item => item.includes(unidadeDeMedida))) {
+            console.log("você ja inseriu esse nome!")
         }
         else {
-            listaExpressionista = expressuda
-        }
-        if (expressuda.length == 3 && expressuda.includes("(") && expressuda.includes(")")) {
-            console.log(Number(listaExpressionista[0]))
             break
         }
-        while (listaExpressionista.length > 1) {
-            if (expressuda.includes("(") == false && expressuda.includes(")") == false) {
-                listaExpressionista = expressuda
+    }
+    for (let i = 0; i < alfabeto.length * 3; i++) {
+        if (i < alfabeto.length) {
+            opcao = alfabeto[i] + ") " + unidadeDeMedida
+            if (listaDeOpcoes.some(item => item.startsWith(opcao[0]))) {
+                continue
             }
-            console.log(listaExpressionista)
-            while (listaExpressionista.includes("somatorial") ||listaExpressionista.includes("§") || listaExpressionista.includes("!") || listaExpressionista.includes("fatorial") || listaExpressionista.includes("?")) {
-                for (let i = 0; i < listaExpressionista.length; i++) {
-                    let dentroDoi = listaExpressionista[i]
-                    if (!isNaN(dentroDoi)) {
-                        listaExpressionista[i] = Number(dentroDoi)
+            else {
+                listaDeOpcoes.push(opcao)
+                break
+            }
+        }
+        else if (i >= alfabeto.length) {
+            if (i < alfabeto.length * 2) {
+                for (let j = 0; j < alfabeto.length; j++) {
+                    opcao = alfabeto[i - alfabeto.length] + alfabeto[j] + ") " + unidadeDeMedida
+                    let letras = alfabeto[i - alfabeto.length] + alfabeto[j]
+                    if (listaDeOpcoes.some(item => item.startsWith(letras))) {
+                        continue
                     }
-                    else if (isNaN(dentroDoi)) {
-                        if (dentroDoi == "fatorial") {
-                            let resultadoProcessual = fatorial(listaExpressionista[i + 1])
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "!") {
-                            let resultadoProcessual = fatorial(listaExpressionista[i - 1])
-                            listaExpressionista.splice(i - 1, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "?") {
-                            let resultadoProcessual = somatorio(listaExpressionista[i - 1])
-                            listaExpressionista.splice(i - 1, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "§") {
-                            let resultadoProcessual = somatorial(listaExpressionista[i - 1])
-                            listaExpressionista.splice(i - 1, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "somatorial") {
-                            let resultadoProcessual = somatorial(listaExpressionista[i + 1])
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi != listaExpressionista.includes("somatorial") && dentroDoi != listaExpressionista.includes("§") && dentroDoi != listaExpressionista.includes("?") && dentroDoi != listaExpressionista.includes("!") && dentroDoi != listaExpressionista.includes("fatorial")) {
-                            continue
-                        }
+                    else {
+                        listaDeOpcoes.push(opcao)
+                        break
                     }
                 }
-            }
-            while (listaExpressionista.includes("^") || listaExpressionista.includes("log") || listaExpressionista.includes("sen") || listaExpressionista.includes("cos") || listaExpressionista.includes("tan") || listaExpressionista.includes("arctan") || listaExpressionista.includes("arccos")|| listaExpressionista.includes("arcsen") || listaExpressionista.includes("raiz")) {
-                for (let i = 0; i < listaExpressionista.length; i++) {
-                    let dentroDoi = listaExpressionista[i]
-                    if (!isNaN(dentroDoi)) {
-                        listaExpressionista[i] = Number(dentroDoi)
-                    }
-                    else if (isNaN(dentroDoi)) {
-                        if (dentroDoi == "^") {
-                            if (listaExpressionista[i + 2] == "/") {
-                                let resultadoProcessual = listaExpressionista[i + 1] / listaExpressionista[i + 3]
-                                resultadoProcessual = Math.pow(listaExpressionista[i - 1], resultadoProcessual)
-                                listaExpressionista.splice(i - 1, 5, resultadoProcessual)
-                            }
-                            else if (listaExpressionista[i + 2] == "*") {
-                                let resultadoProcessual = listaExpressionista[i + 1] * listaExpressionista[i + 3]
-                                resultadoProcessual = Math.pow(listaExpressionista[i - 1], resultadoProcessual)
-                                listaExpressionista.splice(i - 1, 5, resultadoProcessual)
-                            }
-                            else {
-                            let resultadoProcessual = Math.pow(listaExpressionista[i - 1], listaExpressionista[i + 1])
-                            listaExpressionista.splice(i - 1, 3, resultadoProcessual)
-                            }
-                        }
-                        else if (dentroDoi == "raiz") {
-                            if (!isNaN(listaExpressionista[i - 1])) {
-                                if (listaExpressionista[i - 1] == 3 || listaExpressionista[i - 1] == "3") {
-                                    let resultadoProcessual = Math.cbrt(listaExpressionista[i + 1]) 
-                                    listaExpressionista.splice(i - 1, 3, resultadoProcessual)
-                                }
-                                else {
-                                    let resultadoProcessual = Math.pow(listaExpressionista[i + 1], 1/listaExpressionista[i - 1])
-                                    listaExpressionista.splice(i - 1, 3, resultadoProcessual)
-                                }
-                            }
-                            else {
-                            let resultadoProcessual = Math.pow(listaExpressionista[i + 1], 1/2)
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                            }
-                        }
-                        else if (dentroDoi == "log") {
-                            let resultadoProcessual = logaritmo(listaExpressionista[i + 2], listaExpressionista[i + 1])
-                            if (isNaN(listaExpressionista[i + 2])) {
-                                resultadoProcessual = logaritmo(listaExpressionista[i + 1])
-                            }
-                            listaExpressionista.splice(i, 3, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "sen") {
-                            let resultadoProcessual = Math.round(Math.sin(listaExpressionista[i + 1] * Math.PI / 180) * 100000) / 100000
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "cos") {
-                            let resultadoProcessual = Math.round(Math.cos(listaExpressionista[i + 1] * Math.PI / 180) * 100000) / 100000
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "tan") {
-                            let resultadoProcessual = Math.round(Math.tan(listaExpressionista[i + 1] * Math.PI / 180) * 100000) / 100000
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "arcsen") {
-                            let radianos = Math.asin(listaExpressionista[i + 1])
-                            let graus = radianos * 180 / Math.PI
-                            let resultadoProcessual = Math.round(graus * 100000) / 100000
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "arccos") {
-                            let radianos = Math.acos(listaExpressionista[i + 1])
-                            let graus = radianos * 180 / Math.PI
-                            let resultadoProcessual = Math.round(graus * 100000) / 100000
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "arctan") {
-                            let radianos = Math.atan(listaExpressionista[i + 1])
-                            let graus = radianos * 180 / Math.PI
-                            let resultadoProcessual = Math.round(graus * 100000) / 100000
-                            listaExpressionista.splice(i, 2, resultadoProcessual)
-                        }
-                        else if (dentroDoi != listaExpressionista.includes("^") && dentroDoi != listaExpressionista.includes("log") && dentroDoi != listaExpressionista.includes("sen") && dentroDoi != listaExpressionista.includes("cos") && dentroDoi != listaExpressionista.includes("tan") && dentroDoi != listaExpressionista.includes("arctan") && listaExpressionista.includes("raiz") && dentroDoi != listaExpressionista.includes("arcsen") && dentroDoi != listaExpressionista.includes("arccos")) {
-                            continue
-                        }
-                    }
+                if (listaDeOpcoes.includes(opcao)) {
+                    break
                 }
             }
-            while (listaExpressionista.includes("*") || listaExpressionista.includes("/")) {
-                for (let i = 0; i < listaExpressionista.length; i++) {
-                    let dentroDoi = listaExpressionista[i]
-                    if (!isNaN(dentroDoi)) {
-                        listaExpressionista[i] = Number(dentroDoi)
-                    }
-                    else if (isNaN(dentroDoi)) {
-                        if (dentroDoi == "*") {
-                            if (listaExpressionista[i - 1] == "*" || listaExpressionista[i + 1] == "*") {
-                                listaExpressionista.splice(listaExpressionista[i], 1)
-                                console.log(listaExpressionista)
-                            }
-                            else {
-                            let resultadoProcessual = Number(listaExpressionista[i - 1]) * Number(listaExpressionista[i + 1])
-                            listaExpressionista.splice(i - 1, 3, resultadoProcessual)
-                            }
-                        }
-                        else if (dentroDoi == "/") {
-                            let resultadoProcessual = Number(listaExpressionista[i - 1] / listaExpressionista[i + 1])
-                            listaExpressionista.splice(i - 1, 3, resultadoProcessual)
-                        }
-                        else if (dentroDoi != "*" && dentroDoi != "/") {
+            else if (i >= alfabeto.length * 2) {
+                for (let j = 0; j < alfabeto.length; j++) {
+                    for (let k = 0; k < alfabeto.length; k++) {
+                        opcao = alfabeto[i - alfabeto.length * 2] + alfabeto[j] + alfabeto[k] + ") " + unidadeDeMedida
+                        let letras = alfabeto[i - alfabeto.length * 2] + alfabeto[j] + alfabeto[k]
+                        if (listaDeOpcoes.some(item => item.startsWith(letras))) {
                             continue
                         }
+                        else {
+                            listaDeOpcoes.push(opcao)
+                            break
+                        }
+                    }
+                    if (listaDeOpcoes.includes(opcao)) {
+                        break
                     }
                 }
-            }
-            while (listaExpressionista.includes("+") || listaExpressionista.includes("-")) {
-                for (let i = 0; i < listaExpressionista.length; i++) {
-                    let dentroDoi = listaExpressionista[i]
-                    if (!isNaN(dentroDoi)) {
-                        listaExpressionista[i] = Number(dentroDoi)
-                    }
-                    else if (isNaN(dentroDoi)) {
-                        if (dentroDoi == "+") {
-                            let resultadoProcessual = Number(listaExpressionista[i - 1]) + Number(listaExpressionista[i + 1])
-                            listaExpressionista.splice(i - 1, 3, resultadoProcessual)
-                        }
-                        else if (dentroDoi == "-") {
-                            let resultadoProcessual = Number(listaExpressionista[i - 1]) - Number(listaExpressionista[i + 1])
-                            listaExpressionista.splice(i - 1, 3, resultadoProcessual)
-                        }
-                        else if (dentroDoi !== "+" && dentroDoi !== "-") {
-                            continue
-                        }
-                    }
+                if (listaDeOpcoes.includes(opcao)) {
+                    break
                 }
             }
-        if (listaExpressionista.length == 1) {
-            expressuda.splice(inicio, fim - inicio + 1, listaExpressionista[0])
-        } 
-        if (expressuda.length == 1) {
-        let resultado = listaExpressionista[0]
-        expressuda.splice(inicio, fim - inicio + 1, resultado)
-        console.log(listaExpressionista[0])
         }
     }
+    console.log("Lista de unidade de medidas feitas pelo o usuario")
+    for (let i = 0; i < listaDeOpcoes.length; i++) {    
+        console.log(listaDeOpcoes[i])
+    }
 }
-console.log(somatorial(-3))
